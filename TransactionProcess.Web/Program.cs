@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using TransactionProcess.Core.Interfaces;
 using TransactionProcess.Infrastructure.Data;
+using TransactionProcess.Infrastructure.Repositories;
 
 namespace TransactionProcess.Web
 {
@@ -11,6 +13,7 @@ namespace TransactionProcess.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             // Configure Entity Framework
             builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -1,8 +1,35 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<TransactionProcess.Core.Entities.TransactionRecord>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Transactions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Transaction Identifier</th>
+            <th>Account Number</th>
+            <th>Amount</th>
+            <th>Currency Code</th>
+            <th>Transaction Date</th>
+            <th>Status</th>
+            <th>Create Date</th>
+            <th>Create User</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.Id</td>
+                <td>@transaction.TransactionId</td>
+                <td>@transaction.AccountNumber</td>
+                <td>@transaction.Amount.ToString("C")</td>
+                <td>@transaction.CurrencyCode</td>
+                <td>@transaction.TransactionDate.ToString("g")</td>
+                <td>@transaction.Status</td>
+                <td>@transaction.CreateDate</td>
+                <td>@transaction.CreateUser</td>
+            </tr>
+        }
+    </tbody>
+</table>
