@@ -57,5 +57,26 @@ namespace TransactionProcess.Web.Controllers
 
             return View(model);
         }
+
+        [HttpGet("currency/{currencyCode}")]
+        public async Task<IActionResult> GetByCurrency(string currencyCode)
+        {
+            var transactions = await _repository.GetByCurrencyAsync(currencyCode);
+            return Json(transactions);
+        }
+
+        [HttpGet, Route("date-range/{start:datetime}/{end:datetime}")]
+        public async Task<IActionResult> GetByDateRange(DateTime start,[FromRoute] DateTime end)
+        {
+            var transactions = await _repository.GetByDateRangeAsync(start, end);
+            return Json(transactions);
+        }
+
+        [HttpGet("status/{status}")]
+        public async Task<IActionResult> GetByStatus(string status)
+        {
+            var transactions = await _repository.GetByStatusAsync(status);
+            return Json(transactions);
+        }
     }
 }
