@@ -21,7 +21,7 @@ namespace TransactionProcess.Infrastructure.Services
         {
             try
             {
-                TransactionRecord transactions;
+                List<TransactionRecord> transactions;
 
                 if (Path.GetExtension(fileName).ToLower() == ".csv")
                 {
@@ -33,7 +33,7 @@ namespace TransactionProcess.Infrastructure.Services
                     return false;
                 }
 
-                await _repository.AddAsync(transactions);
+                await _repository.AddRangeAsync(transactions);
                 return true;
             }
             catch (Exception ex)
@@ -43,30 +43,31 @@ namespace TransactionProcess.Infrastructure.Services
             }
         }
 
-        private async Task<TransactionRecord> ProcessCsvAsync(Stream fileStream, string createUser)
+        private async Task<List<TransactionRecord>> ProcessCsvAsync(Stream fileStream, string createUser)
         {
-            TransactionRecord transactionRecord;
-
             using var reader = new StreamReader(fileStream);
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                await csv.ReadAsync();
-                var record = csv.GetRecord<dynamic>();
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            
+            var transactionRecords = new List<TransactionRecord>();
 
-                transactionRecord = new TransactionRecord
+            await foreach (var record in csv.GetRecordsAsync<dynamic>())
+            {
+                var transaction = new TransactionRecord
                 {
                     TransactionId = record.TransactionId,
                     AccountNumber = record.AccountNumber,
                     Amount = decimal.Parse(record.Amount),
                     CurrencyCode = record.CurrencyCode,
-                    TransactionDate = DateTime.ParseExact(record.TransactionDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                    TransactionDate = DateTime.ParseExact(record.TransactionDate, "dd/MM/yyyy hh:mm:ss", CultureInfo.InvariantCulture),
                     Status = MapStatus(record.Status),
                     CreateDate = DateTime.UtcNow,
                     CreateUser = createUser
                 };
+
+                transactionRecords.Add(transaction);
             }
 
-            return transactionRecord;
+            return transactionRecords;
         }
 
         private string MapStatus(string status)

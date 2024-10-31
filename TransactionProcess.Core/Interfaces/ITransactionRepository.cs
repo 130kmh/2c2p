@@ -9,5 +9,6 @@ namespace TransactionProcess.Core.Interfaces
         Task<IEnumerable<TransactionRecord>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<TransactionRecord>> GetByStatusAsync(string status);
         Task AddAsync(TransactionRecord transaction);
+        Task AddRangeAsync(IEnumerable<TransactionRecord> transactions);
     }
 }

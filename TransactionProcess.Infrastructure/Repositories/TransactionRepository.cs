@@ -47,5 +47,11 @@ namespace TransactionProcess.Infrastructure.Repositories
             await _context.TransactionRecords.AddAsync(transaction);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddRangeAsync(IEnumerable<TransactionRecord> transactions)
+        {
+            await _context.TransactionRecords.AddRangeAsync(transactions);
+            await _context.SaveChangesAsync();
+        }
     }
 }
