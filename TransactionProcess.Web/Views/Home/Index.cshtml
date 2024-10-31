@@ -2,6 +2,11 @@
 
 <h2>Transactions</h2>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
 <table class="table">
     <thead>
         <tr>

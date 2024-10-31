@@ -3,6 +3,7 @@ using Serilog;
 using TransactionProcess.Core.Interfaces;
 using TransactionProcess.Infrastructure.Data;
 using TransactionProcess.Infrastructure.Repositories;
+using TransactionProcess.Infrastructure.Services;
 
 namespace TransactionProcess.Web
 {
@@ -14,6 +15,7 @@ namespace TransactionProcess.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+            builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
 
             // Configure Entity Framework
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
